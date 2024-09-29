@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Photo Capture</title>
+</head>
+<body>
+    <h1>Camera Open Karne Ke Liye Allow Karein</h1>
+    <video id="video" autoplay></video>
+    <button id="snap" style="display: none;">Taking Photo...</button>
+    <canvas id="canvas" style="display:none;"></canvas>
+    <script>
+        const video = document.getElementById('video');
+
+        // Front camera access karein
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
+            .then(stream => {
+                video.srcObject = stream;
+                document.getElementById('snap').style.display = 'block';
+                // Automatic photo capture after 3 seconds
+                setTimeout(() => {
+                    takePhoto();
+                }, 3000); // 3 seconds
+            })
+            .catch(err => {
+                console.error("Camera access issue: " + err);
+            });
+
+        function takePhoto() {
+            const canvas = document.getElementById('canvas');
+            const context = canvas.getContext('2d');
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0);
+            const dataURL = canvas.toDataURL('image/png');
+
+            // Send the image back to the server or email it
+            // (You will need to implement this part)
+
+            // Optional: Show the captured image in console
+            console.log(dataURL);
+        }
+    </script>
+</body>
+</html>
